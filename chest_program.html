@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Chest Program">
+<title>Chest Program</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+  :root {
+    --red: #C0392B;
+    --red-dark: #A93226;
+    --red-light: #FADBD8;
+    --red-text: #8B0000;
+    --dark: #1C1C1C;
+    --mid: #3D3D3D;
+    --grey: #555;
+    --bg: #F5F5F5;
+    --card: #FFFFFF;
+    --border: rgba(0,0,0,0.1);
+    --text: #1C1C1C;
+    --text2: #666;
+    --text3: #999;
+    --green-bg: #EAF3DE;
+    --green-text: #3B6D11;
+    --yellow: #F4D03F;
+    --yellow-text: #B7950B;
+    --back-bg: #F8F9F9;
+    --radius: 14px;
+    --radius-sm: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111;
+      --card: #1E1E1E;
+      --border: rgba(255,255,255,0.1);
+      --text: #F0F0F0;
+      --text2: #AAA;
+      --text3: #666;
+      --back-bg: #252525;
+      --green-bg: #1A2E0D;
+      --green-text: #7EC850;
+      --red-light: #3D1010;
+      --red-text: #FF8080;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; }
+  body { overflow-x: hidden; }
+
+  /* HEADER */
+  .hdr { background: var(--red); padding: env(safe-area-inset-top, 44px) 16px 0; }
+  .hdr-inner { padding: 12px 0 0; }
+  .hdr-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .hdr h1 { font-size: 22px; font-weight: 600; color: #fff; letter-spacing: -0.5px; }
+  .wnav { display: flex; align-items: center; gap: 8px; }
+  .wnav button { background: rgba(255,255,255,0.2); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .wnav button:active { background: rgba(255,255,255,0.35); }
+  .wlbl { font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 600; min-width: 80px; text-align: center; }
+  .dtabs { display: flex; gap: 6px; padding: 10px 0 12px; }
+  .dtab { flex: 1; padding: 7px 4px; background: rgba(255,255,255,0.15); border: none; color: rgba(255,255,255,0.7); border-radius: 10px; font-size: 12px; cursor: pointer; font-family: inherit; font-weight: 500; }
+  .dtab.act { background: #fff; color: var(--red); font-weight: 600; }
+  .dtab.done { background: rgba(255,255,255,0.3); color: rgba(255,255,255,0.9); }
+  .pbar { height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; margin-bottom: 0; }
+  .pfill { height: 100%; background: #fff; border-radius: 2px; transition: width 0.4s; }
+
+  /* CONTENT */
+  .ct { padding: 14px 14px 40px; max-width: 480px; margin: 0 auto; }
+  .card { background: var(--card); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; }
+  .top-card { border: 2px solid var(--red); }
+  .top-badge { display: inline-flex; align-items: center; gap: 4px; background: var(--red-light); color: var(--red-text); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
+  .ex-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .ex-sub { font-size: 14px; color: var(--text2); margin-bottom: 12px; }
+  .clabel { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+  .ir { margin-bottom: 10px; }
+  .ir label { display: block; font-size: 13px; color: var(--text2); margin-bottom: 5px; }
+  .ir input { width: 100%; padding: 12px 14px; font-size: 18px; font-family: inherit; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); outline: none; font-weight: 500; }
+  .ir input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(192,57,43,0.15); }
+  .ta { width: 100%; padding: 10px 12px; font-size: 15px; font-family: inherit; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); resize: none; outline: none; margin-top: 4px; }
+  .ta:focus { border-color: var(--red); }
+  .btn-p { width: 100%; padding: 16px; background: var(--red); color: #fff; border: none; border-radius: var(--radius); font-size: 17px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 4px; letter-spacing: -0.2px; }
+  .btn-p:active { background: var(--red-dark); transform: scale(0.98); }
+  .bwt { font-size: 44px; font-weight: 700; color: var(--text); line-height: 1; margin: 4px 0 3px; letter-spacing: -1px; }
+  .dbadge { display: inline-flex; align-items: center; gap: 4px; background: var(--green-bg); color: var(--green-text); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+  .ebtn { background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 14px; font-size: 13px; cursor: pointer; font-family: inherit; color: var(--text2); margin-left: 8px; }
+  .bo-card { border-left: 3px solid var(--red); border-radius: 0 var(--radius) var(--radius) 0; background: var(--back-bg); }
+  .bo-wt { font-size: 36px; font-weight: 700; color: var(--text); letter-spacing: -1px; }
+  .bo-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+  .pending { font-size: 15px; color: var(--text3); }
+  .ex-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+  .ex-row:last-child { border-bottom: none; }
+  .ex-n { font-size: 15px; color: var(--text); font-weight: 500; }
+  .ex-d { font-size: 13px; color: var(--text2); margin-top: 3px; line-height: 1.4; }
+  .ex-w { font-size: 16px; font-weight: 600; color: var(--text); white-space: nowrap; margin-left: 12px; padding-top: 2px; }
+  .dl-banner { background: var(--back-bg); border-left: 3px solid var(--yellow); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 14px; margin-bottom: 10px; font-size: 14px; color: var(--text2); }
+  .feeder-pill { display: inline-block; background: var(--back-bg); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: 12px; color: var(--text2); margin-bottom: 10px; }
+  .note-txt { font-size: 13px; color: var(--text2); font-style: italic; margin-top: 6px; }
+
+  /* SETUP */
+  .setup { padding: env(safe-area-inset-top, 44px) 16px 40px; max-width: 480px; margin: 0 auto; }
+  .setup-logo { width: 56px; height: 56px; background: var(--red); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 24px 0 20px; }
+  .setup-logo i { font-size: 28px; color: #fff; }
+  .setup h2 { font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 6px; letter-spacing: -0.5px; }
+  .setup > p { font-size: 16px; color: var(--text2); margin-bottom: 28px; line-height: 1.5; }
+  .section-hd { font-size: 13px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin: 20px 0 10px; }
+  .qg { margin-bottom: 14px; }
+  .ql { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .qd { font-size: 13px; color: var(--text2); margin-bottom: 8px; }
+  .qo { display: flex; gap: 8px; }
+  .qb { flex: 1; padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 17px; font-weight: 600; cursor: pointer; font-family: inherit; color: var(--text); }
+  .qb.sel { background: var(--red); color: #fff; border-color: var(--red); }
+  .qb:active { transform: scale(0.97); }
+  .hidden { display: none !important; }
+
+  /* Week badge */
+  .week-badge { display: inline-block; background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; margin-bottom: 6px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  /* RPE badge */
+  .rpe-badge { display: inline-block; background: var(--back-bg); border: 1px solid var(--border); border-radius: 8px; padding: 3px 10px; font-size: 13px; color: var(--text2); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- SETUP SCREEN -->
+<div id="setup" class="setup">
+  <div class="setup-logo"><i class="ti ti-barbell"></i></div>
+  <h2>Chest Program</h2>
+  <p>Enter your details once — all weights calculate automatically across all 12 weeks.</p>
+
+  <div class="section-hd">Your lifts</div>
+  <div class="ir"><label>Bench press 1RM (kg)</label><input type="number" id="s1" placeholder="e.g. 140" step="2.5" min="20" inputmode="decimal"></div>
+  <div class="ir"><label>Close grip bench 1RM (kg)</label><input type="number" id="s2" placeholder="e.g. 135" step="2.5" min="20" inputmode="decimal"></div>
+
+  <div class="section-hd">Bench questionnaire — rate 1 to 3</div>
+  <div class="qg">
+    <div class="ql">General stress / sleep</div>
+    <div class="qd">1 = high stress &nbsp;·&nbsp; 2 = average &nbsp;·&nbsp; 3 = low stress</div>
+    <div class="qo" id="q0"><button class="qb" onclick="sq(0,1)">1</button><button class="qb" onclick="sq(0,2)">2</button><button class="qb" onclick="sq(0,3)">3</button></div>
+  </div>
+  <div class="qg">
+    <div class="ql">Bench volume recovery</div>
+    <div class="qd">1 = poor &nbsp;·&nbsp; 2 = average &nbsp;·&nbsp; 3 = very well</div>
+    <div class="qo" id="q1"><button class="qb" onclick="sq(1,1)">1</button><button class="qb" onclick="sq(1,2)">2</button><button class="qb" onclick="sq(1,3)">3</button></div>
+  </div>
+  <div class="qg">
+    <div class="ql">Bench technique</div>
+    <div class="qd">1 = needs work &nbsp;·&nbsp; 2 = average/good &nbsp;·&nbsp; 3 = near perfect</div>
+    <div class="qo" id="q2"><button class="qb" onclick="sq(2,1)">1</button><button class="qb" onclick="sq(2,2)">2</button><button class="qb" onclick="sq(2,3)">3</button></div>
+  </div>
+  <div class="qg">
+    <div class="ql">Bench intensity recovery</div>
+    <div class="qd">1 = poor &nbsp;·&nbsp; 2 = average &nbsp;·&nbsp; 3 = very well</div>
+    <div class="qo" id="q3"><button class="qb" onclick="sq(3,1)">1</button><button class="qb" onclick="sq(3,2)">2</button><button class="qb" onclick="sq(3,3)">3</button></div>
+  </div>
+
+  <button class="btn-p" onclick="go()" style="margin-top:24px">Start program →</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="main" class="hidden">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <div class="hdr-top">
+        <h1>Chest Program</h1>
+        <div class="wnav">
+          <button onclick="cw(-1)" aria-label="Previous week"><i class="ti ti-chevron-left"></i></button>
+          <span class="wlbl" id="wl">Week 1</span>
+          <button onclick="cw(1)" aria-label="Next week"><i class="ti ti-chevron-right"></i></button>
+        </div>
+      </div>
+      <div class="dtabs" id="dt"></div>
+    </div>
+    <div class="pbar"><div class="pfill" id="pf"></div></div>
+  </div>
+  <div class="ct" id="dc"></div>
+</div>
+
+<script>
+const GR = x => Math.round(x / 2.5) * 2.5;
+let P = {}, qa = [null,null,null,null], S = {w:1, d:1}, logs = {};
+
+// Load saved data
+function loadData() {
+  try {
+    const saved = localStorage.getItem('chestProg');
+    if (saved) {
+      const d = JSON.parse(saved);
+      P = d.P || {};
+      qa = d.qa || [null,null,null,null];
+      S = d.S || {w:1, d:1};
+      logs = d.logs || {};
+      return Object.keys(P).length > 0;
+    }
+  } catch(e) {}
+  return false;
+}
+
+function saveData() {
+  try { localStorage.setItem('chestProg', JSON.stringify({P, qa, S, logs})); } catch(e) {}
+}
+
+function sq(i, v) {
+  qa[i] = v;
+  document.querySelectorAll(`#q${i} .qb`).forEach((b,j) => b.classList.toggle('sel', j+1===v));
+}
+
+function go() {
+  const b = parseFloat(document.getElementById('s1').value);
+  const cg = parseFloat(document.getElementById('s2').value);
+  if (!b || b < 20) { alert('Enter your bench press 1RM'); return; }
+  if (!cg || cg < 20) { alert('Enter your close grip bench 1RM'); return; }
+  if (qa.some(q => q === null)) { alert('Please answer all 4 questionnaire questions'); return; }
+  P = { b, cg, BRST: qa[1]+qa[0]+qa[2], BTI: qa[2]+qa[3] };
+  saveData();
+  document.getElementById('setup').classList.add('hidden');
+  document.getElementById('main').classList.remove('hidden');
+  render();
+}
+
+function cw(d) { S.w = Math.max(1, Math.min(12, S.w+d)); S.d = 1; saveData(); render(); }
+function sd(d) { S.d = d; saveData(); render(); }
+function lk(w, d) { return `w${w}d${d}`; }
+
+function prog() {
+  const {b, cg, BRST, BTI} = P;
+  const s2 = (t,lo,hi) => BRST < t ? lo : hi;
+  const s4 = (t1,v1,t2,v2,t3,v3,v4) => BRST<t1?v1:BRST<=t2?v2:BRST<=t3?v3:v4;
+  const wt = (plo,phi) => GR(b * (BTI < 4 ? plo : phi));
+  const wf = p => GR(b * p);
+  const wo = (top,plo,phi) => GR(top * (BTI < 4 ? plo : phi));
+
+  return {
+    1:{days:{
+      1:{top:{reps:4,rpe:6}, back:{sets:s2(6,3,4),reps:7,wt:()=>wt(0.625,0.65),offTop:false}, ex:[]},
+      2:{top:{reps:4,rpe:6}, back:{sets:s2(7,3,4),reps:5,wt:(tw)=>wo(tw,0.9,0.92),offTop:true}, ex:[]},
+      3:{top:null,back:null,ex:[{n:'Bench press varied grip',s:2,r:5,w:wf(0.7),rpe:7,note:'1 finger in/out comp grip · AMRAP to RPE'}]},
+      4:{top:null,back:null,ex:[{n:'Machine chest press',s:3,r:'10–12',w:null,rpe:'7–8',note:'Choose your own weight'}]},
+    }},
+    2:{days:{
+      1:{top:{reps:4,rpe:6}, back:{sets:s2(6,3,4),reps:8,wt:()=>wt(0.625,0.65),offTop:false}, ex:[]},
+      2:{top:{reps:4,rpe:6}, back:{sets:s4(6,3,6,4,7,4,5),reps:5,wt:(tw)=>wo(tw,0.9,0.92),offTop:true}, ex:[]},
+      3:{top:null,back:null,ex:[{n:'Bench press varied grip',s:3,r:'AMRAP',w:wf(0.7),rpe:7,note:'1 finger in/out comp grip'}]},
+    }},
+    3:{days:{
+      1:{top:{reps:4,rpe:7}, back:{sets:s2(6,3,4),reps:8,wt:()=>wt(0.65,0.675),offTop:false}, ex:[]},
+      2:{top:{reps:4,rpe:7}, back:{sets:s4(6,3,6,4,7,4,5),reps:5,wt:(tw)=>wo(tw,0.9,0.92),offTop:true}, ex:[]},
+      3:{top:null,back:null,ex:[{n:'Bench press varied grip',s:3,r:5,w:wf(0.725),rpe:7,note:'1 finger in/out comp grip'}]},
+    }},
+    4:{days:{
+      1:{top:{reps:4,rpe:7.5}, back:{sets:s2(6,3,4),reps:8,wt:()=>wt(0.675,0.7),offTop:false}, ex:[]},
+      2:{top:{reps:4,rpe:7.5}, back:{sets:s4(6,3,6,4,7,4,5),reps:5,wt:(tw)=>wo(tw,0.9,0.92),offTop:true}, ex:[]},
+      3:{top:null,back:null,ex:[{n:'Bench press varied grip',s:3,r:6,w:wf(0.725),rpe:8,note:'1 finger in/out comp grip'}]},
+    }},
+    5:{days:{
+      1:{top:{reps:4,rpe:8}, back:{sets:s2(6,3,4),reps:8,wt:()=>wt(0.7,0.725),offTop:false}, ex:[]},
+      2:{top:{reps:4,rpe:8}, back:{sets:s4(6,3,6,4,7,4,5),reps:4,wt:(tw)=>wo(tw,0.91,0.93),offTop:true}, ex:[]},
+      3:{top:null,back:null,ex:[{n:'Bench press varied grip',s:3,r:'AMRAP',w:wf(0.75),rpe:8,note:'1 finger in/out comp grip'}]},
+    }},
+    6:{days:{
+      1:{top:{reps:3,rpe:8}, back:{sets:s2(6,4,5),reps:6,wt:()=>wt(0.725,0.75),offTop:false}, ex:[]},
+      2:{top:{reps:3,rpe:8}, back:{sets:s4(6,4,6,5,7,5,6),reps:3,wt:(tw)=>wo(tw,0.91,0.93),offTop:true}, ex:[]},
+      3:{top:null,back:null,ex:[{n:'Bench press varied grip',s:3,r:7,w:wf(0.75),rpe:9,note:'1 finger in/out comp grip'}]},
+    }},
+    7:{deload:true,days:{
+      1:{top:null,back:null,ex:[
+        {n:'Bench press',s:3,r:6,w:wt(0.675,0.7),rpe:'–',note:'Deload — stay fresh'},
+        {n:'Bench press (heavy)',s:4,r:3,w:wt(0.775,0.8),rpe:'–',note:'Brief heavy sets'},
+      ]},
+      2:{top:null,back:null,ex:[
+        {n:'Bench press',s:4,r:3,w:wt(0.775,0.8),rpe:'–',note:'Deload'},
+        {n:'Bench press varied grip',s:3,r:6,w:wt(0.675,0.7),rpe:'–',note:'Deload'},
+      ]},
+      3:{top:null,back:null,ex:[{n:'Bench press varied grip',s:3,r:6,w:wt(0.675,0.7),rpe:'–',note:'Deload'}]},
+      4:{top:null,back:null,ex:[{n:'Machine chest press',s:4,r:'10–12',w:null,rpe:'7–8',note:'Choose your own weight'}]},
+    }},
+    8:{days:{
+      1:{top:null,back:{sets:s2(6,4,5),reps:5,wt:()=>wt(0.7,0.725),offTop:false}, ex:[]},
+      2:{top:{reps:4,rpe:8,feeder:{r:1,rpe:7}}, back:{sets:s2(6,4,5),reps:4,wt:(tw)=>wo(tw,0.92,0.94),offTop:true}, ex:[]},
+      3:{top:null,back:null,ex:[{n:'Bench press varied grip',s:s2(6,3,4),r:7,w:wt(0.65,0.675),rpe:'–',note:''}]},
+    }},
+    9:{days:{
+      1:{top:null,back:{sets:s2(6,4,5),reps:5,wt:()=>wt(0.725,0.75),offTop:false}, ex:[]},
+      2:{top:{reps:3,rpe:8,feeder:{r:1,rpe:7}}, back:{sets:s2(6,4,5),reps:3,wt:(tw)=>wo(tw,0.92,0.94),offTop:true}, ex:[]},
+      3:{top:null,back:null,ex:[{n:'Bench press varied grip',s:s2(6,3,4),r:7,w:wt(0.675,0.7),rpe:'–',note:''}]},
+    }},
+    10:{days:{
+      1:{top:{reps:2,rpe:8.5}, back:{sets:s2(6,4,5),reps:4,wt:()=>wt(0.75,0.775),offTop:false}, ex:[]},
+      2:{top:{reps:2,rpe:8.5}, back:{sets:s2(7,6,7),reps:2,wt:(tw)=>wo(tw,0.92,0.94),offTop:true},
+         ex:[{n:'Bench press varied grip',s:s2(6,3,4),r:6,w:wt(0.7,0.725),rpe:'–',note:''}]},
+      3:{top:null,back:null,ex:[{n:'Bench press varied grip',s:s2(6,3,4),r:6,w:wt(0.7,0.725),rpe:'–',note:''}]},
+    }},
+    11:{days:{
+      1:{top:{reps:1,rpe:8.5,label:'5 build-up singles',singlesCount:5},
+         back:{sets:s2(6,4,5),reps:4,wt:()=>wt(0.775,0.8),offTop:false},
+         backFirst:true, ex:[]},
+      2:{top:{reps:1,rpe:9,label:'5 build-up singles',singlesCount:5},
+         back:{sets:s4(6,3,6,4,7,4,5),reps:2,wt:()=>wt(0.825,0.85),offTop:false},
+         ex:[{n:'Bench press varied grip',s:s2(6,3,4),r:6,w:wt(0.725,0.75),rpe:'–',note:''}]},
+      3:{top:null,back:null,ex:[{n:'Bench press varied grip',s:s2(6,3,4),r:6,w:wt(0.725,0.75),rpe:'–',note:''}]},
+    }},
+    12:{days:{
+      1:{top:null,back:null,ex:[{n:'Bench press prep sets',s:s2(7,3,4),r:5,w:wf(0.8),rpe:'–',note:'80% — groove the movement'}]},
+      2:{top:null,back:null,ex:[
+        {n:'Bench press doubles',s:2,r:1,w:wf(0.95),rpe:'–',note:'95% — final prep'},
+        {n:'Bench press back-down',s:s2(7,4,5),r:2,w:wf(0.85),rpe:'–',note:'85%'},
+      ]},
+      3:{top:{reps:1,rpe:'MAX',label:'1RM TEST'},back:null,ex:[],isTest:true},
+    }},
+  };
+}
+
+function render() {
+  const pr = prog(), wd = pr[S.w];
+  const days = Object.keys(wd.days).map(Number);
+  const wn = {7:'Week 7 — Deload', 12:'Week 12 — Test'};
+  document.getElementById('wl').textContent = wn[S.w] || `Week ${S.w}`;
+  const dt = document.getElementById('dt');
+  dt.innerHTML = days.map(d => {
+    const done = (logs[lk(S.w,d)] || {}).done;
+    return `<button class="dtab${S.d===d?' act':''}${done?' done':''}" onclick="sd(${d})">Day ${d}${done?' ✓':''}</button>`;
+  }).join('');
+  const done = days.filter(d => (logs[lk(S.w,d)] || {}).done).length;
+  document.getElementById('pf').style.width = `${(done/days.length)*100}%`;
+  renderDay(wd, S.d);
+}
+
+function renderDay(wd, day) {
+  const dd = wd.days[day], lkey = lk(S.w,day), lg = logs[lkey] || {};
+  let h = '';
+  if (wd.deload) h += `<div class="dl-banner"><strong style="color:var(--yellow-text)">Deload week</strong> — reduced volume, don't push it.</div>`;
+
+  if (dd.backFirst) {
+    if (dd.back) h += renderBack(dd, lg);
+    if (dd.top)  h += renderTop(dd, lg);
+  } else {
+    if (dd.top)  h += renderTop(dd, lg);
+    if (dd.back) h += renderBack(dd, lg);
+  }
+
+  if (dd.ex && dd.ex.length) h += renderEx(dd, lg);
+
+  if (!dd.top) {
+    const done = lg.done;
+    if (!done) h += `<button class="btn-p" onclick="cpDay()"><i class="ti ti-check"></i> Mark day complete</button>`;
+    else h += `<div style="display:flex;align-items:center;padding:10px 0;gap:8px"><span class="dbadge"><i class="ti ti-check"></i> Day complete</span><button class="ebtn" onclick="undo()">Undo</button></div>`;
+  }
+  document.getElementById('dc').innerHTML = h;
+}
+
+function renderTop(dd, lg) {
+  const ts = dd.top, done = lg.done, lw = lg.topWeight;
+  let h = `<div class="card top-card"><div class="top-badge"><i class="ti ti-star"></i> Top set</div>`;
+  if (ts.feeder) h += `<div class="feeder-pill"><i class="ti ti-info-circle"></i> Do 1 feeder single @ RPE ${ts.feeder.rpe} first</div><br>`;
+  h += `<div class="ex-title">Bench press${ts.label ? ` — ${ts.label}` : ''}</div>`;
+  if (dd.isTest) h += `<div class="ex-sub">1 rep max test — trust your prep</div>`;
+  else h += `<div class="ex-sub">${ts.singlesCount ? ts.singlesCount+'×' : '1×'}${ts.reps} rep${ts.reps>1?'s':''} &nbsp;·&nbsp; <span class="rpe-badge">RPE ${ts.rpe}</span></div>`;
+  if (!done) {
+    h += `<div class="ir"><label>Weight lifted (kg)</label><input type="number" id="tw" placeholder="e.g. 120" step="2.5" min="20" inputmode="decimal"></div>`;
+    h += `<div class="ir"><label>Notes <span style="color:var(--text3);font-weight:400">(optional)</span></label><textarea class="ta" id="tn" rows="2" placeholder="How did it feel?"></textarea></div>`;
+    h += `<button class="btn-p" onclick="cpTop()"><i class="ti ti-check"></i> Complete top set</button>`;
+  } else {
+    h += `<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div class="bwt">${lw} kg</div><span class="dbadge"><i class="ti ti-check"></i> Done</span><button class="ebtn" onclick="undo()">Edit</button></div>`;
+    if (lg.note) h += `<div class="note-txt">"${lg.note}"</div>`;
+  }
+  return h + '</div>';
+}
+
+function renderBack(dd, lg) {
+  const bs = dd.back, done = lg.done, lw = lg.topWeight;
+  let bwt;
+  if (bs.offTop && done && lw) bwt = bs.wt(lw);
+  else if (!bs.offTop) bwt = bs.wt();
+  let h = `<div class="card bo-card"><div class="clabel">Back-down sets</div>`;
+  if (bwt) {
+    h += `<div class="bo-wt">${bwt} kg</div>`;
+    const src = bs.offTop && done && lw ? `off your ${lw} kg top set` : 'from your 1RM';
+    h += `<div class="bo-sub">${bs.sets} sets &nbsp;×&nbsp; ${bs.reps} reps &nbsp;·&nbsp; ${src}</div>`;
+  } else {
+    h += `<div class="pending">Complete your top set to see weight</div>`;
+    h += `<div class="bo-sub" style="margin-top:6px">${bs.sets} sets &nbsp;×&nbsp; ${bs.reps} reps</div>`;
+  }
+  return h + '</div>';
+}
+
+function renderEx(dd, lg) {
+  const lbl = dd.top || dd.back ? 'Also today' : 'Today';
+  let h = `<div class="card"><div class="clabel">${lbl}</div>`;
+  dd.ex.forEach(e => {
+    h += `<div class="ex-row"><div><div class="ex-n">${e.n}</div><div class="ex-d">${e.s} sets &nbsp;×&nbsp; ${e.r} reps${e.rpe&&e.rpe!=='–'?' &nbsp;·&nbsp; RPE '+e.rpe:''}${e.note?' &nbsp;·&nbsp; '+e.note:''}</div></div>`;
+    h += `<div class="ex-w">${e.w ? e.w+' kg' : '—'}</div></div>`;
+  });
+  return h + '</div>';
+}
+
+function cpTop() {
+  const wtEl = document.getElementById('tw'), noteEl = document.getElementById('tn');
+  const wt = parseFloat(wtEl ? wtEl.value : 0);
+  if (!wt || wt < 20) { alert('Enter the weight you lifted'); return; }
+  logs[lk(S.w,S.d)] = {done:true, topWeight:GR(wt), note: noteEl ? noteEl.value.trim() : ''};
+  saveData(); render();
+}
+function cpDay() { logs[lk(S.w,S.d)] = {done:true}; saveData(); render(); }
+function undo() { delete logs[lk(S.w,S.d)]; saveData(); render(); }
+
+// Boot
+if (loadData() && Object.keys(P).length > 0) {
+  document.getElementById('setup').classList.add('hidden');
+  document.getElementById('main').classList.remove('hidden');
+  render();
+}
+</script>
+</body>
+</html>
